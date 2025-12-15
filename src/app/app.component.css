@@ -1,0 +1,42 @@
+:host { display: flex; justify-content: center; height: 100vh; background-color: #dfe6e9; font-family: 'Segoe UI', sans-serif; padding: 20px; box-sizing: border-box; }
+.main-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; width: 100%; max-width: 1400px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+/* Sidebar */
+.sidebar { background: #f8f9fa; padding: 20px; border-right: 1px solid #e0e0e0; display: flex; flex-direction: column; overflow-y: auto; }
+.form-group { margin-bottom: 15px; }
+label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem; color: #2d3436; }
+input, select { width: 100%; padding: 10px; border: 1px solid #ced6e0; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+
+/* Badges de Provedor */
+.badge { font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; color: white; margin-left: 5px; }
+.badge.google { background-color: #4285F4; }
+.badge.openai { background-color: #10a37f; }
+
+.btn-primary { background: #6c5ce7; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; transition: 0.3s; }
+.btn-primary:hover { background: #5649c0; }
+.btn-primary:disabled { background: #b2bec3; }
+
+/* Status */
+.progress-container { height: 6px; background: #dfe6e9; border-radius: 4px; margin-top: 15px; overflow: hidden; }
+.progress-bar { height: 100%; background: #6c5ce7; transition: width 0.3s; }
+.progress-bar.success { background: #00b894; }
+.progress-bar.error { background: #d63031; }
+
+.status-msg { margin-top: 10px; padding: 10px; border-radius: 5px; font-size: 0.85rem; }
+.error-msg { background: #ffebee; color: #c0392b; }
+.success-msg { background: #e8f5e9; color: #27ae60; }
+
+/* Main Area */
+.result-area { display: flex; flex-direction: column; }
+.toolbar { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+.tabs button { background: none; border: none; padding: 10px 15px; cursor: pointer; font-weight: 600; border-bottom: 2px solid transparent; }
+.tabs button.active { color: #6c5ce7; border-bottom-color: #6c5ce7; }
+.actions button { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; color: white; font-weight: bold; font-size: 0.9rem; }
+.btn-secondary { background: #2d3436; }
+.btn-success { background: #00b894; }
+
+.content { flex-grow: 1; position: relative; background: #fff; }
+.tab-content { width: 100%; height: 100%; }
+iframe { width: 100%; height: 100%; display: block; }
+textarea { width: 100%; height: 100%; border: none; padding: 20px; font-family: monospace; resize: none; background: #2d3436; color: #fab1a0; box-sizing: border-box; }
+.placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: #b2bec3; }

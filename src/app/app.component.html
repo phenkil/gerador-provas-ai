@@ -1,20 +1,80 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<div class="main-container">
+  
+  <aside class="sidebar">
+    <h2>🎓 Gerador Angular</h2>
+    
+    <div style="background: #e8f5e9; color: #2e7d32; padding: 10px; border-radius: 5px; font-size: 0.8rem; margin-bottom: 15px; border: 1px solid #c8e6c9;">
+      ✅ API Keys configuradas no sistema
+    </div>
 
+    <div class="form-group">
+      <label>🤖 Escolha o Motor (IA)</label>
+      <select [(ngModel)]="selectedModel">
+        <option *ngFor="let m of availableModels" [ngValue]="m">
+          {{ m.name }}
+        </option>
+      </select>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+      <label>Matéria</label>
+      <input type="text" [(ngModel)]="examData.materia">
+    </div>
+
+    <div class="form-group">
+      <label>Assunto</label>
+      <input type="text" [(ngModel)]="examData.assunto">
+    </div>
+
+    <div class="form-group">
+      <label>Ano</label>
+      <input type="text" [(ngModel)]="examData.ano">
+    </div>
+
+    <button (click)="generate()" [disabled]="isLoading" class="btn-primary">
+      {{ isLoading ? 'Gerando...' : 'Gerar Prova' }}
+    </button>
+
+    <div class="progress-container" *ngIf="isLoading || progress > 0">
+      <div class="progress-bar" [style.width.%]="progress" 
+           [class.success]="progress === 100"
+           [class.error]="statusMessage.includes('Erro')"></div>
+    </div>
+    
+    <div *ngIf="statusMessage" class="status-msg" 
+         [class.error-msg]="statusMessage.includes('Erro')"
+         [class.success-msg]="statusMessage.includes('Sucesso')">
+      {{ statusMessage }}
+    </div>
+  </aside>
+
+  <main class="result-area">
+    <div class="toolbar">
+      <div class="tabs">
+        <button [class.active]="activeTab === 'preview'" (click)="activeTab = 'preview'">👁️ Visualizar</button>
+        <button [class.active]="activeTab === 'code'" (click)="activeTab = 'code'">💻 Código</button>
+      </div>
+      
+      <div class="actions">
+        <button *ngIf="generatedHtml" (click)="copyCode()" class="btn-secondary">📋 Copiar</button>
+        <button *ngIf="generatedHtml" (click)="downloadExam()" class="btn-success">💾 Salvar no PC</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div *ngIf="!generatedHtml && !isLoading" class="placeholder">
+        <p>Configure os parâmetros e clique em Gerar.</p>
+      </div>
+
+      <div *ngIf="activeTab === 'preview' && generatedHtml" class="tab-content">
+        <iframe [srcdoc]="safeHtmlUrl" frameborder="0"></iframe>
+      </div>
+
+      <div *ngIf="activeTab === 'code' && generatedHtml" class="tab-content">
+        <textarea readonly>{{ generatedHtml }}</textarea>
+      </div>
+    </div>
+  </main>
+</div>
