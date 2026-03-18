@@ -25,11 +25,43 @@ export class AppComponent {
 
   selectedModel: AIModel = this.availableModels[0];
 
+// ==========================================
+  // NOVAS LISTAS PARA OS COMBOS
+  // ==========================================
+  materias: string[] = [
+    'Arte',
+    'Biologia',
+    'Ciências',
+    'Educação Física',
+    'Filosofia',
+    'Física',
+    'Geografia',
+    'História',
+    'Língua Espanhola',
+    'Língua Inglesa',
+    'Língua Portuguesa',
+    'Matemática',
+    'Química',
+    'Sociologia'
+  ];
+
+  anosEscolares: string[] = [
+    '6º ano do Ensino Fundamental',
+    '7º ano do Ensino Fundamental',
+    '8º ano do Ensino Fundamental',
+    '9º ano do Ensino Fundamental',
+    '1º ano do Ensino Médio',
+    '2º ano do Ensino Médio',
+    '3º ano do Ensino Médio'
+  ];
+
+  // Valores padrão ajustados para casar com as listas
   examData = {
-    materia: 'FILOSOFIA',
-    assunto: 'Filosofia e arte no Renascimento',
-    ano: '7º ano do fundamental'
+    materia: 'Filosofia', 
+    assunto: 'Filosofia e arte no Renascimento', // Este continua sendo texto livre
+    ano: '7º ano do Ensino Fundamental'
   };
+  // ==========================================
 
   isLoading: boolean = false;
   progress: number = 0;
