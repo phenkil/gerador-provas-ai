@@ -20,17 +20,21 @@
 
     <div class="form-group">
       <label>Matéria</label>
-      <input type="text" [(ngModel)]="examData.materia">
+      <select [(ngModel)]="examData.materia">
+        <option *ngFor="let mat of materias" [value]="mat">{{ mat }}</option>
+      </select>
     </div>
 
     <div class="form-group">
       <label>Assunto</label>
-      <input type="text" [(ngModel)]="examData.assunto">
+      <input type="text" [(ngModel)]="examData.assunto" placeholder="Ex: Revolução Francesa">
     </div>
 
     <div class="form-group">
-      <label>Ano</label>
-      <input type="text" [(ngModel)]="examData.ano">
+      <label>Ano Escolar</label>
+      <select [(ngModel)]="examData.ano">
+        <option *ngFor="let ano of anosEscolares" [value]="ano">{{ ano }}</option>
+      </select>
     </div>
 
     <button (click)="generate()" [disabled]="isLoading" class="btn-primary">
