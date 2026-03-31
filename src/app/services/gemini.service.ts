@@ -85,7 +85,11 @@ export class ContentGeneratorService {
   private buildPrompt(meta: any): string {
     return `
       Atue como um desenvolvedor Front-End Sênior.
-      Crie um arquivo HTML5 completo (Single File Application) contendo CSS interno e JavaScript.
+      Crie um arquivo HTML5 completo contendo CSS interno e JavaScript.
+      
+      SEGURANÇA (OBRIGATÓRIO):
+      Adicione a seguinte tag exata dentro do <head> do HTML gerado para garantir a segurança da página:
+      <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline';">
       
       DADOS DA PROVA:
       - Matéria: ${meta.materia}

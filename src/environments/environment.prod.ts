@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  googleKey: '', // Fica vazio para segurança pública
+  openaiKey: ''
 };

@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  googleKey: 'AIzaSy_SUA_CHAVE_GOOGLE_REAL_AQUI',
+  openaiKey: 'sk-SUA_CHAVE_OPENAI_REAL_AQUI'
 };
 
 /*
