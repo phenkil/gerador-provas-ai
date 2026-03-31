@@ -77,15 +77,19 @@ export class AppComponent {
     private sanitizer: DomSanitizer
   ) {}
 
-  generate() {
-    // Nova etapa de sanitização e validação
-    const assuntoSanitizado = this.examData.assunto.replace(/[<>]/g, '').substring(0, 150);
-	
 	generate() {
     // Agora o sistema lê as chaves direto do arquivo de ambiente!
     const currentKey = this.selectedModel.provider === 'google' 
       ? environment.googleKey 
       : environment.openaiKey;
+	  
+	  	// 1. Trava anti-spam: Se já estiver gerando, ignora novos cliques
+    if (this.isLoading) {
+      return;
+    }
+	  
+	      // Nova etapa de sanitização e validação
+    const assuntoSanitizado = this.examData.assunto.replace(/[<>]/g, '').substring(0, 150);
 
     if (!currentKey) {
       this.setStatus('Erro: API Key não configurada no environment.', 'error');
@@ -125,41 +129,42 @@ export class AppComponent {
   downloadExam() {
     if (!this.generatedHtml) return;
 
+    // Limpeza rigorosa: remove qualquer tag <script src="..."> ou <img src="..."> 
+    // que tente buscar recursos fora do arquivo.
+    let htmlSeguroParaDownload = this.generatedHtml
+      .replace(/<script[^>]+src=["'][^"']+["'][^>]*><\/script>/gi, '')
+      .replace(/<link[^>]+href=["'][^"']+["'][^>]*>/gi, '');
+	  
     const blob = new Blob([this.generatedHtml], { type: 'text/html' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-	
-	// Atualização na lógica de numeração no downloadExam()
-    const storageValue = localStorage.getItem(storageKey);
-    let ultimoNumero = parseInt(storageValue || '0', 10);
     
-    // Se o usuário manipulou o LocalStorage e quebrou o número, reseta para 0
+    // 1. Limpa os textos para evitar caracteres inválidos no nome do arquivo
+    const safeAno = this.examData.ano.replace(/[^a-zA-Z0-9º]/g, '_');
+    const safeMateria = this.examData.materia.replace(/[^a-zA-Z0-9]/g, '_');
+    
+    // 2. Chave de armazenamento única
+    const storageKey = `contador_${safeAno}_${safeMateria}`;
+    
+    // 3. Lê o último número salvo (Declaramos com 'let' APENAS AQUI)
+    let ultimoNumero = parseInt(localStorage.getItem(storageKey) || '0', 10);
+    
+    // 4. Segurança: Se o número corrompeu, reseta para zero (sem 'let' aqui)
     if (isNaN(ultimoNumero)) {
       ultimoNumero = 0;
     }
     
-    // 1. Limpa os textos para evitar caracteres inválidos no nome do arquivo do Windows/Mac
-    // Mantém letras, números e o símbolo 'º'. Troca espaços por '_'
-    const safeAno = this.examData.ano.replace(/[^a-zA-Z0-9º]/g, '_');
-    const safeMateria = this.examData.materia.replace(/[^a-zA-Z0-9]/g, '_');
-    
-    // 2. Chave de armazenamento única para essa combinação de Ano e Matéria
-    const storageKey = `contador_${safeAno}_${safeMateria}`;
-    
-    // 3. Lê o último número salvo (se for a primeira vez, assume 0)
-    let ultimoNumero = parseInt(localStorage.getItem(storageKey) || '0', 10);
-    
-    // 4. Soma 1 para a nova prova
+    // 5. Soma 1 para a nova prova
     let proximoNumero = ultimoNumero + 1;
     
-    // 5. Salva o novo número de volta no navegador
+    // 6. Salva o novo número de volta no navegador
     localStorage.setItem(storageKey, proximoNumero.toString());
     
-    // 6. Formata o número para ter sempre 2 dígitos (01, 02, ..., 10, 11)
+    // 7. Formata o número para ter sempre 2 dígitos (01, 02...)
     const numeroFormatado = proximoNumero.toString().padStart(2, '0');
     
-    // 7. Monta o nome final do arquivo: Ano_Materia_01.html
+    // 8. Monta o nome final do arquivo
     const filename = `${safeAno}_${safeMateria}_${numeroFormatado}.html`;
 
     a.download = filename;
